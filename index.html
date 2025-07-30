@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Gelişmiş Hesap Makinesi</title>
+  <title>Hesap Makinesi</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,16 +13,13 @@
       padding: 10px;
       font-size: 16px;
     }
-    #input2 {
-      display: inline-block;
-    }
   </style>
 </head>
 <body>
 
-  <h1>Hesap Makinesi</h1>
+  <h1>Gelişmiş Hesap Makinesi</h1>
 
-  <label for="islemTuru">İşlem Türü Seç:</label>
+  <label for="islemTuru">İşlem Türü:</label>
   <select id="islemTuru" onchange="girisleriAyarla()">
     <option value="dortIslem">Dört İşlem</option>
     <option value="faktoriyel">Faktöriyel</option>
@@ -33,8 +30,7 @@
 
   <input type="number" id="input1" placeholder="1. Değer">
   <input type="number" id="input2" placeholder="2. Değer">
-  
-  <select id="operator" style="display: inline-block;">
+  <select id="operator">
     <option value="+">+</option>
     <option value="-">−</option>
     <option value="*">×</option>
@@ -55,14 +51,17 @@
       if (islem === "faktoriyel") {
         input2.style.display = "none";
         operator.style.display = "none";
+        document.getElementById("input1").placeholder = "Sayı";
       } else if (islem === "vki") {
         input2.style.display = "inline-block";
-        input2.placeholder = "Boy (metre)";
         operator.style.display = "none";
+        document.getElementById("input1").placeholder = "Kilo (kg)";
+        input2.placeholder = "Boy (metre)";
       } else {
         input2.style.display = "inline-block";
-        input2.placeholder = "2. Değer";
         operator.style.display = "inline-block";
+        document.getElementById("input1").placeholder = "1. Sayı";
+        input2.placeholder = "2. Sayı";
       }
 
       document.getElementById("sonuc").textContent = "---";
@@ -70,61 +69,53 @@
 
     function hesapla() {
       const islem = document.getElementById("islemTuru").value;
-      const input1 = parseFloat(document.getElementById("input1").value);
-      const input2 = parseFloat(document.getElementById("input2").value);
+      const val1 = document.getElementById("input1").value;
+      const val2 = document.getElementById("input2").value;
       const operator = document.getElementById("operator").value;
       let sonuc;
 
-      if (isNaN(input1)) {
-        sonuc = "Lütfen geçerli sayılar girin.";
-      } else {
-        switch (islem) {
-          case "dortIslem":
-            if (isNaN(input2)) {
-              sonuc = "Lütfen iki sayı girin.";
+      if (islem === "faktoriyel") {
+        const sayi = parseInt(val1);
+        if (isNaN(sayi) || sayi < 0) {
+          sonuc = "Geçerli bir sayı girin (0 veya üstü).";
+        } else {
+          sonuc = 1;
+          for (let i = 2; i <= sayi; i++) {
+            sonuc *= i;
+          }
+        }
+      } else if (islem === "vki") {
+        const kilo = parseFloat(val1);
+        const boy = parseFloat(val2);
+        if (isNaN(kilo) || isNaN(boy) || boy <= 0) {
+          sonuc = "Geçerli kilo ve boy girin.";
+        } else {
+          const vki = kilo / (boy * boy);
+          sonuc = vki.toFixed(2);
+        }
+      } else if (islem === "dortIslem") {
+        const num1 = parseFloat(val1);
+        const num2 = parseFloat(val2);
+        if (isNaN(num1) || isNaN(num2)) {
+          sonuc = "İki geçerli sayı girin.";
+        } else {
+          switch (operator) {
+            case "+": sonuc = num1 + num2; break;
+            case "-": sonuc = num1 - num2; break;
+            case "*": sonuc = num1 * num2; break;
+            case "/":
+              sonuc = num2 === 0 ? "0'a bölünemez!" : num1 / num2;
               break;
-            }
-            switch (operator) {
-              case "+": sonuc = input1 + input2; break;
-              case "-": sonuc = input1 - input2; break;
-              case "*": sonuc = input1 * input2; break;
-              case "/":
-                if (input2 === 0) {
-                  sonuc = "0'a bölünemez!";
-                } else {
-                  sonuc = input1 / input2;
-                }
-                break;
-            }
-            break;
-
-          case "faktoriyel":
-            if (!Number.isInteger(input1) || input1 < 0) {
-              sonuc = "Lütfen 0 veya daha büyük bir tam sayı girin.";
-            } else {
-              sonuc = 1;
-              for (let i = 2; i <= input1; i++) {
-                sonuc *= i;
-              }
-            }
-            break;
-
-          case "vki":
-            if (isNaN(input2) || input2 <= 0) {
-              sonuc = "Lütfen geçerli kilo ve boy girin.";
-            } else {
-              sonuc = (input1 / (input2 * input2)).toFixed(2);
-            }
-            break;
+          }
         }
       }
 
       document.getElementById("sonuc").textContent = sonuc;
     }
 
-    // Sayfa yüklendiğinde girişleri uygun şekilde ayarla
-    girisleriAyarla();
+    girisleriAyarla(); // Sayfa açıldığında girişleri ayarla
   </script>
 
 </body>
 </html>
+
