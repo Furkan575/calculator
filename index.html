@@ -45,23 +45,24 @@
   <script>
     function girisleriAyarla() {
       const islem = document.getElementById("islemTuru").value;
+      const input1 = document.getElementById("input1");
       const input2 = document.getElementById("input2");
       const operator = document.getElementById("operator");
 
       if (islem === "faktoriyel") {
+        input1.placeholder = "Sayı";
         input2.style.display = "none";
         operator.style.display = "none";
-        document.getElementById("input1").placeholder = "Sayı";
       } else if (islem === "vki") {
+        input1.placeholder = "Kilo (kg)";
+        input2.placeholder = "Boy (metre)";
         input2.style.display = "inline-block";
         operator.style.display = "none";
-        document.getElementById("input1").placeholder = "Kilo (kg)";
-        input2.placeholder = "Boy (metre)";
       } else {
+        input1.placeholder = "1. Sayı";
+        input2.placeholder = "2. Sayı";
         input2.style.display = "inline-block";
         operator.style.display = "inline-block";
-        document.getElementById("input1").placeholder = "1. Sayı";
-        input2.placeholder = "2. Sayı";
       }
 
       document.getElementById("sonuc").textContent = "---";
@@ -69,42 +70,44 @@
 
     function hesapla() {
       const islem = document.getElementById("islemTuru").value;
-      const val1 = document.getElementById("input1").value;
-      const val2 = document.getElementById("input2").value;
+      const input1Val = document.getElementById("input1").value;
+      const input2Val = document.getElementById("input2").value;
       const operator = document.getElementById("operator").value;
+
       let sonuc;
 
       if (islem === "faktoriyel") {
-        const sayi = parseInt(val1);
+        const sayi = parseInt(input1Val);
         if (isNaN(sayi) || sayi < 0) {
-          sonuc = "Geçerli bir sayı girin (0 veya üstü).";
+          sonuc = "Geçerli bir tam sayı girin (0 veya üstü)";
         } else {
           sonuc = 1;
           for (let i = 2; i <= sayi; i++) {
             sonuc *= i;
           }
         }
+
       } else if (islem === "vki") {
-        const kilo = parseFloat(val1);
-        const boy = parseFloat(val2);
+        const kilo = parseFloat(input1Val);
+        const boy = parseFloat(input2Val);
         if (isNaN(kilo) || isNaN(boy) || boy <= 0) {
           sonuc = "Geçerli kilo ve boy girin.";
         } else {
-          const vki = kilo / (boy * boy);
-          sonuc = vki.toFixed(2);
+          sonuc = (kilo / (boy * boy)).toFixed(2);
         }
+
       } else if (islem === "dortIslem") {
-        const num1 = parseFloat(val1);
-        const num2 = parseFloat(val2);
-        if (isNaN(num1) || isNaN(num2)) {
-          sonuc = "İki geçerli sayı girin.";
+        const sayi1 = parseFloat(input1Val);
+        const sayi2 = parseFloat(input2Val);
+        if (isNaN(sayi1) || isNaN(sayi2)) {
+          sonuc = "Lütfen iki sayı girin.";
         } else {
           switch (operator) {
-            case "+": sonuc = num1 + num2; break;
-            case "-": sonuc = num1 - num2; break;
-            case "*": sonuc = num1 * num2; break;
-            case "/":
-              sonuc = num2 === 0 ? "0'a bölünemez!" : num1 / num2;
+            case "+": sonuc = sayi1 + sayi2; break;
+            case "-": sonuc = sayi1 - sayi2; break;
+            case "*": sonuc = sayi1 * sayi2; break;
+            case "/": 
+              sonuc = sayi2 === 0 ? "0'a bölünemez!" : sayi1 / sayi2;
               break;
           }
         }
@@ -113,7 +116,7 @@
       document.getElementById("sonuc").textContent = sonuc;
     }
 
-    girisleriAyarla(); // Sayfa açıldığında girişleri ayarla
+    girisleriAyarla(); // Sayfa ilk yüklendiğinde ayarla
   </script>
 
 </body>
