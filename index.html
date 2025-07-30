@@ -2,31 +2,63 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Hesap Makinesi</title>
+  <title>Basit Hesap Makinesi</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Hesap Makinesi</h2>
-  <input id="sayi1" type="number" placeholder="1. Sayı">
-  <input id="sayi2" type="number" placeholder="2. Sayı">
-  <br>
-  <button onclick="hesapla('+')">+</button>
-  <button onclick="hesapla('-')">-</button>
-  <button onclick="hesapla('*')">*</button>
-  <button onclick="hesapla('/')">/</button>
-  <h3 id="sonuc">Sonuç: </h3>
+
+  <h1>Hesap Makinesi</h1>
+
+  <input type="number" id="num1" placeholder="1. Sayı">
+  <select id="operator">
+    <option value="+">Topla</option>
+    <option value="-">Çıkar</option>
+    <option value="*">Çarp</option>
+    <option value="/">Böl</option>
+  </select>
+  <input type="number" id="num2" placeholder="2. Sayı">
+
+  <button onclick="hesapla()">Hesapla</button>
+
+  <h2>Sonuç: <span id="sonuc">---</span></h2>
 
   <script>
-    function hesapla(islem) {
-      let s1 = parseFloat(document.getElementById('sayi1').value);
-      let s2 = parseFloat(document.getElementById('sayi2').value);
-      let sonuc = 0;
-      if (islem === '+') sonuc = s1 + s2;
-      else if (islem === '-') sonuc = s1 - s2;
-      else if (islem === '*') sonuc = s1 * s2;
-      else if (islem === '/') sonuc = s2 !== 0 ? s1 / s2 : '0\'a bölünemez';
-      document.getElementById('sonuc').innerText = 'Sonuç: ' + sonuc;
+    function hesapla() {
+      const num1 = parseFloat(document.getElementById("num1").value);
+      const num2 = parseFloat(document.getElementById("num2").value);
+      const operator = document.getElementById("operator").value;
+      let sonuc;
+
+      if (isNaN(num1) || isNaN(num2)) {
+        sonuc = "Lütfen her iki sayıyı da girin.";
+      } else {
+        switch(operator) {
+          case "+": sonuc = num1 + num2; break;
+          case "-": sonuc = num1 - num2; break;
+          case "*": sonuc = num1 * num2; break;
+          case "/": 
+            if (num2 === 0) {
+              sonuc = "0'a bölünemez!";
+            } else {
+              sonuc = num1 / num2;
+            }
+            break;
+        }
+      }
+
+      document.getElementById("sonuc").textContent = sonuc;
     }
   </script>
-</body>
-</html>
+
+<
 
