@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Hesap Makinesi</title>
+</head>
+<body>
+  <h2>Hesap Makinesi</h2>
+  <input id="sayi1" type="number" placeholder="1. Sayı">
+  <input id="sayi2" type="number" placeholder="2. Sayı">
+  <br>
+  <button onclick="hesapla('+')">+</button>
+  <button onclick="hesapla('-')">-</button>
+  <button onclick="hesapla('*')">*</button>
+  <button onclick="hesapla('/')">/</button>
+  <h3 id="sonuc">Sonuç: </h3>
+
+  <script>
+    function hesapla(islem) {
+      let s1 = parseFloat(document.getElementById('sayi1').value);
+      let s2 = parseFloat(document.getElementById('sayi2').value);
+      let sonuc = 0;
+      if (islem === '+') sonuc = s1 + s2;
+      else if (islem === '-') sonuc = s1 - s2;
+      else if (islem === '*') sonuc = s1 * s2;
+      else if (islem === '/') sonuc = s2 !== 0 ? s1 / s2 : '0\'a bölünemez';
+      document.getElementById('sonuc').innerText = 'Sonuç: ' + sonuc;
+    }
+  </script>
+</body>
+</html>
+
