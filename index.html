@@ -2,47 +2,128 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Komut Satırı Hesap Makinesi</title>
+  <title>Gelişmiş Hesap Makinesi</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 30px;
     }
-    input, button {
-      font-size: 18px;
+    input, select, button {
+      margin: 10px 5px;
       padding: 10px;
-      margin: 10px 0;
-      width: 300px;
+      font-size: 16px;
+    }
+    #input2 {
+      display: inline-block;
     }
   </style>
 </head>
 <body>
 
-  <h1>Komut Satırı Hesap Makinesi</h1>
+  <h1>Hesap Makinesi</h1>
 
-  <p>Örnek giriş: <strong>8 + 3</strong> veya <strong>10*4</strong></p>
-  <input type="text" id="expression" placeholder="İşlemi girin (örn: 10 + 5)">
+  <label for="islemTuru">İşlem Türü Seç:</label>
+  <select id="islemTuru" onchange="girisleriAyarla()">
+    <option value="dortIslem">Dört İşlem</option>
+    <option value="faktoriyel">Faktöriyel</option>
+    <option value="vki">Vücut Kitle Endeksi</option>
+  </select>
+
+  <br>
+
+  <input type="number" id="input1" placeholder="1. Değer">
+  <input type="number" id="input2" placeholder="2. Değer">
+  
+  <select id="operator" style="display: inline-block;">
+    <option value="+">+</option>
+    <option value="-">−</option>
+    <option value="*">×</option>
+    <option value="/">÷</option>
+  </select>
+
   <br>
   <button onclick="hesapla()">Hesapla</button>
 
   <h2>Sonuç: <span id="sonuc">---</span></h2>
 
   <script>
-    function hesapla() {
-      const ifade = document.getElementById("expression").value;
+    function girisleriAyarla() {
+      const islem = document.getElementById("islemTuru").value;
+      const input2 = document.getElementById("input2");
+      const operator = document.getElementById("operator");
 
-      try {
-        // Güvenlik için sadece izin verilen karakterleri kontrol et
-        if (!/^[0-9+\-*/().\s]+$/.test(ifade)) {
-          throw new Error("Geçersiz karakter kullandınız!");
-        }
-
-        const sonuc = eval(ifade);
-        document.getElementById("sonuc").textContent = sonuc;
-      } catch (e) {
-        document.getElementById("sonuc").textContent = "Hatalı ifade!";
+      if (islem === "faktoriyel") {
+        input2.style.display = "none";
+        operator.style.display = "none";
+      } else if (islem === "vki") {
+        input2.style.display = "inline-block";
+        input2.placeholder = "Boy (metre)";
+        operator.style.display = "none";
+      } else {
+        input2.style.display = "inline-block";
+        input2.placeholder = "2. Değer";
+        operator.style.display = "inline-block";
       }
+
+      document.getElementById("sonuc").textContent = "---";
     }
+
+    function hesapla() {
+      const islem = document.getElementById("islemTuru").value;
+      const input1 = parseFloat(document.getElementById("input1").value);
+      const input2 = parseFloat(document.getElementById("input2").value);
+      const operator = document.getElementById("operator").value;
+      let sonuc;
+
+      if (isNaN(input1)) {
+        sonuc = "Lütfen geçerli sayılar girin.";
+      } else {
+        switch (islem) {
+          case "dortIslem":
+            if (isNaN(input2)) {
+              sonuc = "Lütfen iki sayı girin.";
+              break;
+            }
+            switch (operator) {
+              case "+": sonuc = input1 + input2; break;
+              case "-": sonuc = input1 - input2; break;
+              case "*": sonuc = input1 * input2; break;
+              case "/":
+                if (input2 === 0) {
+                  sonuc = "0'a bölünemez!";
+                } else {
+                  sonuc = input1 / input2;
+                }
+                break;
+            }
+            break;
+
+          case "faktoriyel":
+            if (!Number.isInteger(input1) || input1 < 0) {
+              sonuc = "Lütfen 0 veya daha büyük bir tam sayı girin.";
+            } else {
+              sonuc = 1;
+              for (let i = 2; i <= input1; i++) {
+                sonuc *= i;
+              }
+            }
+            break;
+
+          case "vki":
+            if (isNaN(input2) || input2 <= 0) {
+              sonuc = "Lütfen geçerli kilo ve boy girin.";
+            } else {
+              sonuc = (input1 / (input2 * input2)).toFixed(2);
+            }
+            break;
+        }
+      }
+
+      document.getElementById("sonuc").textContent = sonuc;
+    }
+
+    // Sayfa yüklendiğinde girişleri uygun şekilde ayarla
+    girisleriAyarla();
   </script>
 
 </body>
