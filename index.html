@@ -2,64 +2,48 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Basit Hesap Makinesi</title>
+  <title>Komut Satırı Hesap Makinesi</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 30px;
     }
-    input, select, button {
-      margin: 5px;
+    input, button {
+      font-size: 18px;
       padding: 10px;
-      font-size: 16px;
+      margin: 10px 0;
+      width: 300px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Hesap Makinesi</h1>
+  <h1>Komut Satırı Hesap Makinesi</h1>
 
-  <input type="number" id="num1" placeholder="1. Sayı">
-  <select id="operator">
-    <option value="+">Topla</option>
-    <option value="-">Çıkar</option>
-    <option value="*">Çarp</option>
-    <option value="/">Böl</option>
-  </select>
-  <input type="number" id="num2" placeholder="2. Sayı">
-
+  <p>Örnek giriş: <strong>8 + 3</strong> veya <strong>10*4</strong></p>
+  <input type="text" id="expression" placeholder="İşlemi girin (örn: 10 + 5)">
+  <br>
   <button onclick="hesapla()">Hesapla</button>
 
   <h2>Sonuç: <span id="sonuc">---</span></h2>
 
   <script>
     function hesapla() {
-      const num1 = parseFloat(document.getElementById("num1").value);
-      const num2 = parseFloat(document.getElementById("num2").value);
-      const operator = document.getElementById("operator").value;
-      let sonuc;
+      const ifade = document.getElementById("expression").value;
 
-      if (isNaN(num1) || isNaN(num2)) {
-        sonuc = "Lütfen her iki sayıyı da girin.";
-      } else {
-        switch(operator) {
-          case "+": sonuc = num1 + num2; break;
-          case "-": sonuc = num1 - num2; break;
-          case "*": sonuc = num1 * num2; break;
-          case "/": 
-            if (num2 === 0) {
-              sonuc = "0'a bölünemez!";
-            } else {
-              sonuc = num1 / num2;
-            }
-            break;
+      try {
+        // Güvenlik için sadece izin verilen karakterleri kontrol et
+        if (!/^[0-9+\-*/().\s]+$/.test(ifade)) {
+          throw new Error("Geçersiz karakter kullandınız!");
         }
-      }
 
-      document.getElementById("sonuc").textContent = sonuc;
+        const sonuc = eval(ifade);
+        document.getElementById("sonuc").textContent = sonuc;
+      } catch (e) {
+        document.getElementById("sonuc").textContent = "Hatalı ifade!";
+      }
     }
   </script>
 
-<
-"ARTIK SAYILAR KULLANICI TARAFINDAN GİRİLİYOR HARF VE DİĞER KARAKTERLER GİRİLEMİYOR"
-
+</body>
+</html>
